@@ -1,5 +1,11 @@
 #include "parser.h"
 
+void	to_close(FILE **from, FILE **to)
+{
+	fclose(*from);
+	fclose(*to);
+}
+
 int	main(int argc, char **argv)
 {
 	unsigned char	l_buf[3];
@@ -28,31 +34,61 @@ int	main(int argc, char **argv)
 	while(!feof(from))
 	{
 		//SKIP PRE
-		fseek(from, 8, SEEK_CUR);
+		if (fseek(from, 8, SEEK_CUR) != 0)
+		{
+			perror("Error seeking file");
+			to_close(&from, &to);
+			exit (EXIT_FAILURE);
+		}
 
 		//read category and size
-		if (fread(l_buf, sizeof(l_buf), 1, from) == 0)
+		if (fread(l_buf, 1, sizeof(l_buf), from) != 3)
 		{
 			if (ferror(from))
-				perror("End of file");
+				perror("Error reading");
 			else if (feof(from))
 				perror("End of file reached");
-			fclose(from);
-			fclose(to);
+			to_close(&from, &to);
 			exit (EXIT_FAILURE);
 		}
 		length = l_buf[1] + l_buf[2];
 
 		//alloc buffer size of length
 		buffer = malloc((sizeof(unsigned char) * length));
+		if (buffer == NULL)
+		{
+			perror("Error allocating memory");
+			to_close(&from, &to);
+			exit (EXIT_FAILURE);
+		}
 
 		//reset read ptr and read length
-		fseek(from, -3, SEEK_CUR);
-		fread(buffer, length, 1, from);
+		if (fseek(from, -3, SEEK_CUR) != 0)
+		{
+			perror("Error seeking file");
+			to_close(&from, &to);
+			free(buffer);
+			exit (EXIT_FAILURE);
+		}
+		if (fread(buffer, 1, length, from) != length)
+		{
+			if (ferror(from))
+				perror("Error reading2");
+			else if (feof(from))
+				perror("End of file reached2");
+			to_close(&from, &to);
+			free(buffer);
+			exit (EXIT_FAILURE);
+		}
 	
 		//write to new file
-		fwrite(buffer, length, 1, to);
-
+		if (fwrite(buffer, 1, length, to) != length)
+		{
+			perror("Error writing to a file");
+			to_close(&from, &to);
+			free(buffer);
+			exit (EXIT_FAILURE);
+		}
 		free(buffer);
 	}
 	fclose(from);
