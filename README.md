@@ -10,8 +10,18 @@ git clone git@github.com:sixanimar/ast_parser.git
 
 ## Usage
 
-copy .ast file into /ast_parser
+Copy .ast file into /ast_parser
+
+Create executable by running make command
 
 ```bash
-pars filename.ast
+jguscins@DESKTOP-M8IUFS4:~/ast_parser$ make
+Compiling
+gcc -Wall -Wextra src/parser.c src/strjoin.c src/strlen.c -o pars
+Compilation done
+```
+To pars a file
+
+```bash
+jguscins@DESKTOP-M8IUFS4:~/ast_parser$ ./pars filename.astpars filename.ast
 ```
