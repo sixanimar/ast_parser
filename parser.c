@@ -31,7 +31,16 @@ int	main(int argc, char **argv)
 		fseek(from, 8, SEEK_CUR);
 
 		//read category and size
-		fread(l_buf, sizeof(l_buf), 1, from);
+		if (fread(l_buf, sizeof(l_buf), 1, from) == 0)
+		{
+			if (ferror(from))
+				perror("End of file");
+			else if (feof(from))
+				perror("End of file reached");
+			fclose(from);
+			fclose(to);
+			exit (EXIT_FAILURE);
+		}
 		length = l_buf[1] + l_buf[2];
 
 		//alloc buffer size of length
