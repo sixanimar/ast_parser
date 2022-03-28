@@ -10,7 +10,6 @@ git clone git@github.com:sixanimar/ast_parser.git
 
 ## Usage
 
-Copy .ast file into /ast_parser
 
 Create executable by running make command
 
