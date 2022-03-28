@@ -23,5 +23,5 @@ Compilation done
 To pars a file
 
 ```bash
-jguscins@DESKTOP-M8IUFS4:~/ast_parser$ ./pars filename.astpars filename.ast
+jguscins@DESKTOP-M8IUFS4:~/ast_parser$ ./pars filename.ast
 ```
