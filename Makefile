@@ -18,9 +18,7 @@ all: clean $(SRC) $(INCLUDES)
 
 clean:
 	@rm -f $(NAME)
-
-fclean:
-	rm -f $(NAME)
+	@rm -f combined.ast
 
 re: clean all
 
