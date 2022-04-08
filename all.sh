@@ -2,7 +2,7 @@
 
 rm -f combined.ast
 
-find . -type f -name '*.ast' -exec cat {} + >> combined.ast
+find . -type f -name '*.ast' | sort -n | xargs cat >> combined.ast
 
 ./pars combined.ast
 
